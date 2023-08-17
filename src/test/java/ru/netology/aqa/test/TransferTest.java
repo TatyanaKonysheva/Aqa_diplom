@@ -7,6 +7,7 @@ import ru.netology.aqa.data.DataHelper;
 import ru.netology.aqa.page.DashboardPage;
 
 import static com.codeborne.selenide.Selenide.open;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TransferTest {
     @BeforeAll
@@ -88,7 +89,7 @@ public class TransferTest {
 
     @Test /* Issues #4 */
     @DisplayName("Обычная оплата по дебетовой карте APPROVED с незаполненным полем  \"Год\"")
-    void shouldErrorPaymentApprovedCardWithEmptyMonth() {
+    void shouldErrorPaymentApprovedCardWithEmptyYear() {
         open("http://localhost:8080");
         dashboardPage.paymentGate();
         var approvedCard = DataHelper.getApprovedCardWithNotYear();
@@ -108,7 +109,7 @@ public class TransferTest {
 
     @Test /* Issues #5 */
     @DisplayName("Обычная оплата по дебетовой карте APPROVED с незаполненным полем  \"CVC/CVV\"")
-    void shouldErrorPaymentApprovedCardWithEmptyName() {
+    void shouldErrorPaymentApprovedCardWithEmptyCode() {
         open("http://localhost:8080");
         dashboardPage.paymentGate();
         var approvedCard = DataHelper.getApprovedCardWithNotSecurityCode();
@@ -132,17 +133,17 @@ public class TransferTest {
     void shouldErrorCreditDeclinedCardWithEmptyMonth() {
         open("http://localhost:8080");
         dashboardPage.creditGate();
-        var card = DataHelper.getDeclinedCardWithNotMonth();
+        var card = DataHelper.getDeclinedWithNotMonth();
         dashboardPage.makeTransfer(card);
         dashboardPage.messageFromRequired();
     }
 
     @Test /* Issues #8 */
     @DisplayName("Оплата с помощью кредитных средств по дебетовой карте DECLINED с незаполненным полем  \"Год\"")
-    void shouldErrorCreditDeclinedCardWithEmptyMonth() {
+    void shouldErrorCreditDeclinedCardWithEmptyYear() {
         open("http://localhost:8080");
         dashboardPage.creditGate();
-        var card = DataHelper.getDeclinedCardWithNotYear();
+        var card = DataHelper.getDeclinedWithNotYear();
         dashboardPage.makeTransfer(card);
         dashboardPage.messageFromRequired();
     }
@@ -152,17 +153,17 @@ public class TransferTest {
     void shouldErrorCreditDeclinedCardWithEmptyName() {
         open("http://localhost:8080");
         dashboardPage.creditGate();
-        var card = DataHelper.getDeclinedCardWithNotName();
+        var card = DataHelper.getDeclinedWithNotName();
         dashboardPage.makeTransfer(card);
         dashboardPage.messageFromRequired();
     }
 
     @Test /* Issues #9 */
     @DisplayName("Оплата с помощью кредитных средств по дебетовой карте DECLINED с незаполненным полем  \"CVC/CVV\"")
-    void shouldErrorCreditDeclinedCardWithEmptyName() {
+    void shouldErrorCreditDeclinedCardWithEmptyCode() {
         open("http://localhost:8080");
         dashboardPage.creditGate();
-        var card = DataHelper.getDeclinedCardWithNotSecurityCode();
+        var card = DataHelper.getDeclinedWithNotSecurityCode();
         dashboardPage.makeTransfer(card);
         dashboardPage.messageFromRequiredCode();
     }
@@ -195,6 +196,17 @@ public class TransferTest {
         var approvedCard = DataHelper.getCardNumberSeventeenCharacters();
         var firstSixteenDigits = approvedCard.substring(0, 16);
         Assertions.assertEquals("1111222233334444", firstSixteenDigits);
+    }
+
+    //Неуверенна насколько верен этот тест!!!
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте c невалидным вводом номера карты (ввод букв)")
+    void shouldErrorPaymentCardWithLetterInNumber() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        TextInputValidator validator = new TextInputValidator();
+        String emptyInput = DataHelper.getNumberWithLetter();
+        assertFalse(validator.validateInput(emptyInput));
     }
 
     @Test
@@ -254,9 +266,39 @@ public class TransferTest {
     void shouldErrorPaymentApprovedCardNameWithOneSymbol() {
         open("http://localhost:8080");
         dashboardPage.paymentGate();
-        var approvedCard = DataHelper.getApprovedCardWithCyrillicName();
+        var approvedCard = DataHelper.getApprovedCardWithNameOneSymbol();
         dashboardPage.makeTransfer(approvedCard);
         dashboardPage.messageErrorName();
     }
 
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом одной цифры в поле \"СVC/CVV\"")
+    void shouldErrorPaymentApprovedCardWithOneSymbolInCode() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardWithCodeOneSymbol();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageAboutInvalid();
+    }
+
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом двух цифры в поле \"СVC/CVV\"")
+    void shouldErrorPaymentApprovedCardWithOneSymbolInCode() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardWithCodeTwoSymbol();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageAboutInvalid();
+    }
+
+
+    //К тесту с вводом букв в поле Номера карты!
+    private class TextInputValidator {
+        private String emptyInput;
+
+        public boolean validateInput(String emptyInput) {
+            this.emptyInput = emptyInput;
+            return false;
+        }
+    }
 }

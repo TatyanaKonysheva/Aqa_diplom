@@ -23,9 +23,10 @@ public class DataHelper {
 
 
         public Object substring(int i, int i1) {
+            return null;
         }
     }
- 
+
     public static CardInfo getApprovedCardInfo() {
         return new CardInfo(getCardNumberApproved(),
                 generateMonth(2),
@@ -44,14 +45,6 @@ public class DataHelper {
         );
     }
 
-    //    public static CardInfo getFifteenCharactersNumberCardInfo() {
-//        return new CardInfo(getCardNumberFifteenCharacters(),
-//                generateExpirationMonth(),
-//                generateYear(),
-//                generateName("en"),
-//                generateSecurityCode()
-//        );
-//    }
     public static CardInfo getNotNumberCardInfo() {
         return new CardInfo(null,
                 generateMonth(2),
@@ -97,14 +90,6 @@ public class DataHelper {
         );
     }
 
-    public static CardInfo getDeclinedWithNotNumber() {
-        return new CardInfo(getNotCardNumber(),
-                generateMonth(2),
-                generateYear(0),
-                generateName("en"),
-                generateSecurityCode()
-        );
-    }
 
     public static CardInfo getDeclinedWithNotMonth() {
         return new CardInfo(getCardNumberDeclined(),
@@ -206,6 +191,33 @@ public class DataHelper {
         );
     }
 
+        public static CardInfo getApprovedCardInMonthThreeSymbol() {
+            return new CardInfo(getCardNumberApproved(),
+                    getMonthWithThreeSymbol(),
+                    generateYear(0),
+                    generateName("en"),
+                    generateSecurityCode()
+            );
+    }
+
+    public static CardInfo getApprovedCardInMonthWithLetter() {
+        return new CardInfo(getCardNumberApproved(),
+                getMonthWithLetter(),
+                generateYear(0),
+                generateName("en"),
+                generateSecurityCode()
+        );
+    }
+
+    public static CardInfo getApprovedCardInMonthWithSymbol() {
+        return new CardInfo(getCardNumberApproved(),
+                getMonthWithSymbol(),
+                generateYear(0),
+                generateName("en"),
+                generateSecurityCode()
+        );
+    }
+
     public static CardInfo getApprovedCardWithOneSymbolFromYear() {
         return new CardInfo(getCardNumberApproved(),
                 generateMonth(2),
@@ -224,13 +236,40 @@ public class DataHelper {
         );
     }
 
-        public static CardInfo getApprovedCardWithCyrillicName() {
-            return new CardInfo(getCardNumberApproved(),
-                    generateMonth(2),
-                    generateYear(0),
-                    getCyrillicName(),
-                    generateSecurityCode()
-            );
+    public static CardInfo getApprovedCardInYearThreeSymbol() {
+        return new CardInfo(getCardNumberApproved(),
+                generateMonth(2),
+                getYearWithThreeSymbol(),
+                generateName("en"),
+                generateSecurityCode()
+        );
+    }
+
+    public static CardInfo getApprovedCardInYearWithLetter() {
+        return new CardInfo(getCardNumberApproved(),
+                generateMonth(2),
+                getYearWithLetter(),
+                generateName("en"),
+                generateSecurityCode()
+        );
+    }
+
+    public static CardInfo getApprovedCardInYearWithSymbol() {
+        return new CardInfo(getCardNumberApproved(),
+                generateMonth(2),
+                getYearWithSymbol(),
+                generateName("en"),
+                generateSecurityCode()
+        );
+    }
+
+    public static CardInfo getApprovedCardWithCyrillicName() {
+        return new CardInfo(getCardNumberApproved(),
+                generateMonth(2),
+                generateYear(0),
+                getCyrillicName(),
+                generateSecurityCode()
+        );
     }
 
     public static CardInfo getApprovedCardWithNameOneSymbol() {
@@ -238,6 +277,15 @@ public class DataHelper {
                 generateMonth(2),
                 generateYear(0),
                 getNameWithOneSymbol(),
+                generateSecurityCode()
+        );
+    }
+
+    public static CardInfo getApprovedCardWithNameSymbol() {
+        return new CardInfo(getCardNumberApproved(),
+                generateMonth(2),
+                generateYear(0),
+                getNameWithSymbol(),
                 generateSecurityCode()
         );
     }
@@ -257,6 +305,33 @@ public class DataHelper {
                 generateYear(0),
                 generateName("en"),
                 getCodeWithTwoSymbol()
+        );
+    }
+
+    public static CardInfo getApprovedCardWithCodeFourSymbol() {
+        return new CardInfo(getCardNumberApproved(),
+                generateMonth(2),
+                generateYear(0),
+                generateName("en"),
+                getCodeWithFourSymbol()
+        );
+    }
+
+    public static CardInfo getApprovedCardWithLetterInCode() {
+        return new CardInfo(getCardNumberApproved(),
+                generateMonth(2),
+                generateYear(0),
+                generateName("en"),
+                getCodeWithLetter()
+        );
+    }
+
+    public static CardInfo getApprovedCardWithSymbolInCode() {
+        return new CardInfo(getCardNumberApproved(),
+                generateMonth(2),
+                generateYear(0),
+                generateName("en"),
+                getCodeWithSymbol()
         );
     }
 
@@ -307,6 +382,19 @@ public class DataHelper {
         return faker.number().digits(1);
     }
 
+    public static String getMonthWithThreeSymbol() {
+        return faker.number().digits(3);
+    }
+
+    public static String getMonthWithLetter() {
+        return "AA";
+    }
+
+    public static String getMonthWithSymbol() {
+        return "###";
+    }
+
+
     public static String generateYear(int addYears) {
         return LocalDate.now().plusYears(addYears).format(DateTimeFormatter.ofPattern("yy"));
     }
@@ -317,6 +405,18 @@ public class DataHelper {
 
     public static String getYearWithOneSymbol() {
         return faker.number().digits(1);
+    }
+
+    public static String getYearWithThreeSymbol() {
+        return faker.number().digits(3);
+    }
+
+    public static String getYearWithLetter() {
+        return "AA";
+    }
+
+    public static String getYearWithSymbol() {
+        return "###";
     }
 
     public static String generateName(String locale) {
@@ -337,6 +437,10 @@ public class DataHelper {
         return "V";
     }
 
+    public static String getNameWithSymbol() {
+        return ";%:";
+    }
+
     public static String generateSecurityCode() {
         int code = random.nextInt(1000);
         return String.format("%03d", code); // Formats the code as a 3-digit number with leading zeros if necessary
@@ -345,11 +449,25 @@ public class DataHelper {
     public static String getNotSecurityCode() {
         return "";
     }
+
     public static String getCodeWithOneSymbol() {
         return faker.number().digits(1);
     }
+
     public static String getCodeWithTwoSymbol() {
         return faker.number().digits(2);
+    }
+
+    public static String getCodeWithFourSymbol() {
+        return faker.number().digits(4);
+    }
+
+    public static String getCodeWithLetter() {
+        return "AS";
+    }
+
+    public static String getCodeWithSymbol() {
+        return "#$%";
     }
 
 }

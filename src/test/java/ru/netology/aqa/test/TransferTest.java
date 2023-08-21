@@ -198,15 +198,24 @@ public class TransferTest {
         Assertions.assertEquals("1111222233334444", firstSixteenDigits);
     }
 
-    //Неуверенна насколько верен этот тест!!!
     @Test
     @DisplayName("Обычная оплата по дебетовой карте c невалидным вводом номера карты (ввод букв)")
     void shouldErrorPaymentCardWithLetterInNumber() {
         open("http://localhost:8080");
         dashboardPage.paymentGate();
-        TextInputValidator validator = new TextInputValidator();
-        String emptyInput = DataHelper.getNumberWithLetter();
-        assertFalse(validator.validateInput(emptyInput));
+        var card = DataHelper.getCardNumberWithLetter();
+        dashboardPage.makeTransfer(card);
+        dashboardPage.messageAboutInvalidCardNumber();
+    }
+
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте c невалидным вводом номера карты (ввод символов)")
+    void shouldErrorPaymentCardWithSymbolInNumber() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var card = DataHelper.getCardNumberWithSymbols();
+        dashboardPage.makeTransfer(card);
+        dashboardPage.messageAboutInvalidCardNumber();
     }
 
     @Test
@@ -221,13 +230,43 @@ public class TransferTest {
 
     @Test
     @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом с вводом" +
-            " в поле \"Месяц\" прошндшего месяца текущего года.")
+            " в поле \"Месяц\" прошедшего месяца текущего года.")
     void shouldErrorPaymentApprovedCardWithPastMonth() {
         open("http://localhost:8080");
         dashboardPage.paymentGate();
         var approvedCard = DataHelper.getApprovedCardPastMonth();
         dashboardPage.makeTransfer(approvedCard);
         dashboardPage.messageAboutExpired();
+    }
+
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом 3-ех цифр в поле \"Месяц\"")
+    void shouldErrorPaymentApprovedCardWithThreeSymbolFromMonth() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardInMonthThreeSymbol();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageAboutInvalid();
+    }
+
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом букв в поле \"Месяц\"")
+    void shouldErrorPaymentApprovedCardWithLetterFromMonth() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardInMonthWithLetter();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageAboutInvalid();
+    }
+
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом символов в поле \"Месяц\"")
+    void shouldErrorPaymentApprovedCardWithSymbolFromMonth() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardInMonthWithSymbol();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageAboutInvalid();
     }
 
     @Test
@@ -252,6 +291,36 @@ public class TransferTest {
     }
 
     @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом 3-ех цифр в поле \"Год\"")
+    void shouldErrorPaymentApprovedCardWithThreeSymbolFromYear() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardInYearThreeSymbol();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageAboutInvalid();
+    }
+
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом букв в поле \"Год\"")
+    void shouldErrorPaymentApprovedCardWithLetterFromYear() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardInYearWithLetter();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageAboutInvalid();
+    }
+
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом символов в поле \"Год\"")
+    void shouldErrorPaymentApprovedCardWithSymbolFromYear() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardInYearWithSymbol();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageAboutInvalid();
+    }
+
+    @Test
     @DisplayName("Обычная оплата по дебетовой карте APPROVED с невалидным вводом значения в поле \"Владелец\" (ввод кириллицы)")
     void shouldErrorPaymentApprovedCardWithWithCyrillicName() {
         open("http://localhost:8080");
@@ -272,33 +341,63 @@ public class TransferTest {
     }
 
     @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с невалидным вводом значения в поле \"Владелец\" (ввод символов)")
+    void shouldErrorPaymentApprovedCardNameWithSymbol() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardWithNameSymbol();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.messageErrorName();
+    }
+
+    @Test
     @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом одной цифры в поле \"СVC/CVV\"")
     void shouldErrorPaymentApprovedCardWithOneSymbolInCode() {
         open("http://localhost:8080");
         dashboardPage.paymentGate();
         var approvedCard = DataHelper.getApprovedCardWithCodeOneSymbol();
         dashboardPage.makeTransfer(approvedCard);
-        dashboardPage.messageAboutInvalid();
+        dashboardPage.setMessageAboutInvalidCode();
     }
 
     @Test
     @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом двух цифры в поле \"СVC/CVV\"")
-    void shouldErrorPaymentApprovedCardWithOneSymbolInCode() {
+    void shouldErrorPaymentApprovedCardWithTwoSymbolInCode() {
         open("http://localhost:8080");
         dashboardPage.paymentGate();
         var approvedCard = DataHelper.getApprovedCardWithCodeTwoSymbol();
         dashboardPage.makeTransfer(approvedCard);
-        dashboardPage.messageAboutInvalid();
+        dashboardPage.setMessageAboutInvalidCode();
     }
 
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом 4-ех цифр в поле \"СVC/CVV\"")
+    void shouldErrorPaymentApprovedCardWithFourSymbolInCode() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardWithCodeFourSymbol();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.setMessageAboutInvalidCode();
+    }
 
-    //К тесту с вводом букв в поле Номера карты!
-    private class TextInputValidator {
-        private String emptyInput;
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом букв в поле \"СVC/CVV\"")
+    void shouldErrorPaymentApprovedCardWithLetterInCode() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardWithLetterInCode();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.setMessageAboutInvalidCode();
+    }
 
-        public boolean validateInput(String emptyInput) {
-            this.emptyInput = emptyInput;
-            return false;
-        }
+    @Test
+    @DisplayName("Обычная оплата по дебетовой карте APPROVED с вводом символов  в поле \"СVC/CVV\"")
+    void shouldErrorPaymentApprovedCardWithSymbolInCode() {
+        open("http://localhost:8080");
+        dashboardPage.paymentGate();
+        var approvedCard = DataHelper.getApprovedCardWithSymbolInCode();
+        dashboardPage.makeTransfer(approvedCard);
+        dashboardPage.setMessageAboutInvalidCode();
     }
 }
+

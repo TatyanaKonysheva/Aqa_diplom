@@ -38,6 +38,10 @@ public class DashboardPage {
             .find(exactText("Истёк срок действия карты"));
     private SelenideElement messageErrorName = $$(".input__inner span.input__sub")
             .find(exactText("Неверно указано имя, ведите имя латинскими буквами"));
+
+    private SelenideElement messageAboutInvalidCode =
+            $$("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(2) > span > span > span.input__sub")
+                    .find(exactText("Неверно указан CVC/CVV"));
     public void paymentGate() {
 
         buyButton.click();
@@ -81,11 +85,16 @@ public class DashboardPage {
     public void messageAboutInvalid() {
         messageAboutInvalid.shouldBe(visible, Duration.ofSeconds(15));
     }
+
     public void messageAboutExpired() {
         messageAboutExpired.shouldBe(visible, Duration.ofSeconds(15));
     }
 
     public void messageErrorName() {
+        messageErrorName.shouldBe(visible, Duration.ofSeconds(15));
+    }
+
+    public void setMessageAboutInvalidCode() {
         messageErrorName.shouldBe(visible, Duration.ofSeconds(15));
     }
 }

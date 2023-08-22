@@ -1,4 +1,4 @@
-package ru.netology.data;
+package ru.netology.aqa.data;
 
 import lombok.SneakyThrows;
 import org.apache.commons.dbutils.QueryRunner;
@@ -15,8 +15,9 @@ public class SQLHelper {
     private SQLHelper() {
     }
 
-    private static Connection getConn() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/app", "app", "pass");
+    @SneakyThrows
+    private static Connection getConn() {
+        return DriverManager.getConnection(url, user, password);
     }
 
     @SneakyThrows
@@ -43,7 +44,6 @@ public class SQLHelper {
         return getData(statusSQL);
     }
 
-
     @SneakyThrows
     private static String getData(String query) {
         QueryRunner runner = new QueryRunner();
@@ -52,15 +52,5 @@ public class SQLHelper {
             data = runner.query(conn, query, new ScalarHandler<>());
         }
         return data;
-    }
-
-    @SneakyThrows
-    public static long getOrderTransactionCount() {
-        String countSQL = "SELECT COUNT(*) FROM order_entity;";
-        try (Connection conn = DriverManager.getConnection(url, user, password)) {
-            QueryRunner runner = new QueryRunner();
-            Long count = runner.query(conn, countSQL, new ScalarHandler<>());
-            return count != null ? count : 0;
-        }
     }
 }

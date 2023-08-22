@@ -20,11 +20,6 @@ public class DataHelper {
         private String year;
         private String owner;
         private String code;
-
-
-        public Object substring(int i, int i1) {
-            return null;
-        }
     }
 
     public static CardInfo getApprovedCardInfo() {
@@ -56,7 +51,7 @@ public class DataHelper {
 
     public static CardInfo getApprovedCardWithNotMonth() {
         return new CardInfo(getCardNumberApproved(),
-                getNotMonth(),
+                getEmptyFieldValue(),
                 generateYear(0),
                 generateName("en"),
                 generateSecurityCode()
@@ -66,7 +61,7 @@ public class DataHelper {
     public static CardInfo getApprovedCardWithNotYear() {
         return new CardInfo(getCardNumberApproved(),
                 generateMonth(2),
-                getNotYear(),
+                getEmptyFieldValue(),
                 generateName("en"),
                 generateSecurityCode()
         );
@@ -76,7 +71,7 @@ public class DataHelper {
         return new CardInfo(getCardNumberApproved(),
                 generateMonth(2),
                 generateYear(0),
-                getNotName(),
+                getEmptyFieldValue(),
                 generateSecurityCode()
         );
     }
@@ -86,14 +81,14 @@ public class DataHelper {
                 generateMonth(2),
                 generateYear(0),
                 generateName("en"),
-                getNotSecurityCode()
+                getEmptyFieldValue()
         );
     }
 
 
     public static CardInfo getDeclinedWithNotMonth() {
         return new CardInfo(getCardNumberDeclined(),
-                getNotMonth(),
+                getEmptyFieldValue(),
                 generateYear(0),
                 generateName("en"),
                 generateSecurityCode()
@@ -103,7 +98,7 @@ public class DataHelper {
     public static CardInfo getDeclinedWithNotYear() {
         return new CardInfo(getCardNumberDeclined(),
                 generateMonth(2),
-                getNotYear(),
+                getEmptyFieldValue(),
                 generateName("en"),
                 generateSecurityCode()
         );
@@ -113,7 +108,7 @@ public class DataHelper {
         return new CardInfo(getCardNumberDeclined(),
                 generateMonth(2),
                 generateYear(0),
-                getNotName(),
+                getEmptyFieldValue(),
                 generateSecurityCode()
         );
     }
@@ -123,12 +118,12 @@ public class DataHelper {
                 generateMonth(2),
                 generateYear(0),
                 generateName("en"),
-                getNotSecurityCode()
+                getEmptyFieldValue()
         );
     }
 
     public static CardInfo getCardNumberOneCharacters() {
-        return new CardInfo(getNumberOneCharacters(),
+        return new CardInfo(getRandomNumber(1),
                 generateMonth(2),
                 generateYear(0),
                 generateName("en"),
@@ -137,7 +132,7 @@ public class DataHelper {
     }
 
     public static CardInfo getCardNumberFifteenCharacters() {
-        return new CardInfo(getNumberFifteenCharacters(),
+        return new CardInfo(getRandomNumber(15),
                 generateMonth(2),
                 generateYear(0),
                 generateName("en"),
@@ -175,7 +170,7 @@ public class DataHelper {
 
     public static CardInfo getApprovedCardWithOneSymbolFromMonth() {
         return new CardInfo(getCardNumberApproved(),
-                getMonthWithOneSymbol(),
+                getRandomNumber(1),
                 generateYear(0),
                 generateName("en"),
                 generateSecurityCode()
@@ -191,13 +186,13 @@ public class DataHelper {
         );
     }
 
-        public static CardInfo getApprovedCardInMonthThreeSymbol() {
-            return new CardInfo(getCardNumberApproved(),
-                    getMonthWithThreeSymbol(),
-                    generateYear(0),
-                    generateName("en"),
-                    generateSecurityCode()
-            );
+    public static CardInfo getApprovedCardInMonthThreeSymbol() {
+        return new CardInfo(getCardNumberApproved(),
+                getRandomNumber(3),
+                generateYear(0),
+                generateName("en"),
+                generateSecurityCode()
+        );
     }
 
     public static CardInfo getApprovedCardInMonthWithLetter() {
@@ -221,7 +216,7 @@ public class DataHelper {
     public static CardInfo getApprovedCardWithOneSymbolFromYear() {
         return new CardInfo(getCardNumberApproved(),
                 generateMonth(2),
-                getYearWithOneSymbol(),
+                getRandomNumber(1),
                 generateName("en"),
                 generateSecurityCode()
         );
@@ -239,7 +234,7 @@ public class DataHelper {
     public static CardInfo getApprovedCardInYearThreeSymbol() {
         return new CardInfo(getCardNumberApproved(),
                 generateMonth(2),
-                getYearWithThreeSymbol(),
+                getRandomNumber(3),
                 generateName("en"),
                 generateSecurityCode()
         );
@@ -295,7 +290,7 @@ public class DataHelper {
                 generateMonth(2),
                 generateYear(0),
                 generateName("en"),
-                getCodeWithOneSymbol()
+                getRandomNumber(1)
         );
     }
 
@@ -304,7 +299,7 @@ public class DataHelper {
                 generateMonth(2),
                 generateYear(0),
                 generateName("en"),
-                getCodeWithTwoSymbol()
+                getRandomNumber(2)
         );
     }
 
@@ -313,7 +308,7 @@ public class DataHelper {
                 generateMonth(2),
                 generateYear(0),
                 generateName("en"),
-                getCodeWithFourSymbol()
+                getRandomNumber(4)
         );
     }
 
@@ -346,16 +341,12 @@ public class DataHelper {
         return "5555666677778888";
     }
 
-    public static String getNotCardNumber() {
+    public static String getEmptyFieldValue() {
         return "";
     }
 
-    public static String getNumberOneCharacters() {
-        return faker.number().digits(1);
-    }
-
-    public static String getNumberFifteenCharacters() {
-        return faker.number().digits(15);
+    public static String getRandomNumber(int count) {
+        return faker.number().digits(count);
     }
 
     public static String getNumberSeventeenCharacters() {
@@ -374,17 +365,6 @@ public class DataHelper {
         return LocalDate.now().plusMonths(addMonths).format(DateTimeFormatter.ofPattern("MM"));
     }
 
-    public static String getNotMonth() {
-        return "";
-    }
-
-    public static String getMonthWithOneSymbol() {
-        return faker.number().digits(1);
-    }
-
-    public static String getMonthWithThreeSymbol() {
-        return faker.number().digits(3);
-    }
 
     public static String getMonthWithLetter() {
         return "AA";
@@ -399,18 +379,6 @@ public class DataHelper {
         return LocalDate.now().plusYears(addYears).format(DateTimeFormatter.ofPattern("yy"));
     }
 
-    public static String getNotYear() {
-        return "";
-    }
-
-    public static String getYearWithOneSymbol() {
-        return faker.number().digits(1);
-    }
-
-    public static String getYearWithThreeSymbol() {
-        return faker.number().digits(3);
-    }
-
     public static String getYearWithLetter() {
         return "AA";
     }
@@ -423,10 +391,6 @@ public class DataHelper {
         var faker = new Faker(new Locale(locale));
         String randomName = (faker.name().lastName() + " " + faker.name().firstName());
         return randomName.replace('ё', 'е');
-    }
-
-    public static String getNotName() {
-        return "";
     }
 
     public static String getCyrillicName() {
@@ -444,22 +408,6 @@ public class DataHelper {
     public static String generateSecurityCode() {
         int code = random.nextInt(1000);
         return String.format("%03d", code); // Formats the code as a 3-digit number with leading zeros if necessary
-    }
-
-    public static String getNotSecurityCode() {
-        return "";
-    }
-
-    public static String getCodeWithOneSymbol() {
-        return faker.number().digits(1);
-    }
-
-    public static String getCodeWithTwoSymbol() {
-        return faker.number().digits(2);
-    }
-
-    public static String getCodeWithFourSymbol() {
-        return faker.number().digits(4);
     }
 
     public static String getCodeWithLetter() {

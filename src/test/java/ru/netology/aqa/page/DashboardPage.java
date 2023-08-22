@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class DashboardPage {
+    private final String appUrl;
     private SelenideElement buyButton = $$(".button__text").find(exactText("Купить"));
     private SelenideElement creditButton = $(byText("Купить в кредит"));
 
@@ -42,13 +43,19 @@ public class DashboardPage {
     private SelenideElement messageAboutInvalidCode =
             $$("#root > div > form > fieldset > div:nth-child(3) > span > span:nth-child(2) > span > span > span.input__sub")
                     .find(exactText("Неверно указан CVC/CVV"));
-    public void paymentGate() {
 
+    public DashboardPage(String appUrl) {
+        this.appUrl = appUrl;
+    }
+
+    public void paymentGate() {
+        open(appUrl);
         buyButton.click();
         payment.shouldBe(visible);
     }
 
     public void creditGate() {
+        open(appUrl);
         creditButton.click();
         credit.shouldBe(visible);
     }
@@ -63,38 +70,38 @@ public class DashboardPage {
     }
 
     public void messageSuccess() {
-        messageSuccess.shouldBe(visible, Duration.ofSeconds(20));
+        messageSuccess.shouldBe(visible, Duration.ofSeconds(15));
     }
 
     public void messageError() {
-        messageError.shouldBe(visible, Duration.ofSeconds(20));
+        messageError.shouldBe(visible, Duration.ofSeconds(15));
     }
 
     public void messageFromRequired() {
-        messageFromRequired.shouldBe(visible, Duration.ofSeconds(15));
+        messageFromRequired.shouldBe(visible);
     }
 
     public void messageFromRequiredCode() {
-        messageFromRequiredCode.shouldBe(visible, Duration.ofSeconds(15));
+        messageFromRequiredCode.shouldBe(visible);
     }
 
     public void messageAboutInvalidCardNumber() {
-        messageAboutInvalidCardNumber.shouldBe(visible, Duration.ofSeconds(15));
+        messageAboutInvalidCardNumber.shouldBe(visible);
     }
 
     public void messageAboutInvalid() {
-        messageAboutInvalid.shouldBe(visible, Duration.ofSeconds(15));
+        messageAboutInvalid.shouldBe(visible);
     }
 
     public void messageAboutExpired() {
-        messageAboutExpired.shouldBe(visible, Duration.ofSeconds(15));
+        messageAboutExpired.shouldBe(visible);
     }
 
     public void messageErrorName() {
-        messageErrorName.shouldBe(visible, Duration.ofSeconds(15));
+        messageErrorName.shouldBe(visible);
     }
 
     public void setMessageAboutInvalidCode() {
-        messageErrorName.shouldBe(visible, Duration.ofSeconds(15));
+        messageErrorName.shouldBe(visible);
     }
 }
